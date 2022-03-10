@@ -57,17 +57,7 @@ class MarcoServidor extends JFrame implements Runnable{
             
             while (true) {
                 
-                Socket misocket = servidor.accept();
-                
-        /*  -------------------- DETECTOR USUARISO ONLINE START --------------------  */        
-                
-                InetAddress localizacion = misocket.getInetAddress();
-                
-                String IpRemota = localizacion.getHostAddress();
-                
-                System.out.println("Online " + IpRemota);
-                
-         /*  -------------------- DETECTOR USUARISO ONLINE END --------------------  */        
+                Socket misocket = servidor.accept();        
                 
                 ObjectInputStream paquete_datos = new ObjectInputStream(misocket.getInputStream());
                 
@@ -79,18 +69,30 @@ class MarcoServidor extends JFrame implements Runnable{
                 
                 mensaje = paquete_recibido.getMensaje();
                 
-                areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
-            
-                Socket enviaDestinatario = new Socket(ip, 9090);
-                
-                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
-                
-                paqueteReenvio.writeObject(paquete_recibido);
-                
-                enviaDestinatario.close();
-                
-                misocket.close();
-
+                if(!mensaje.equals("Online")) {
+                	
+                	areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
+                    
+                    Socket enviaDestinatario = new Socket(ip, 9090);
+                    
+                    ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                    
+                    paqueteReenvio.writeObject(paquete_recibido);
+                    
+                    enviaDestinatario.close();
+                    
+                    misocket.close();
+                }else {
+             /*  -------------------- DETECTOR USUARISO ONLINE START --------------------  */        
+                    
+                    InetAddress localizacion = misocket.getInetAddress();
+                    
+                    String IpRemota = localizacion.getHostAddress();
+                    
+                    System.out.println("Online " + IpRemota);
+                    
+             /*  -------------------- DETECTOR USUARISO ONLINE END --------------------  */
+                }
             }
             
         } catch (IOException | ClassNotFoundException ex) {
