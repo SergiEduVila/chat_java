@@ -90,16 +90,6 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         
         ip = new JComboBox();
         
-        /*ip.addItem("Usuario1");
-        
-        ip.addItem("Usuario2");
-        
-        ip.addItem("Usuario3");
-        
-        ip.addItem("192.168.1.139");
-        
-        ip.addItem("192.168.1.140");*/
-        
         add(ip);
         
         campochat = new JTextArea(12,20);
@@ -158,7 +148,6 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 		
                 		ip.addItem(i);
                 	}
-                	//campochat.append("\n" + paqueteRecibido.getIps());
                 }
             }
         } catch (Exception e) {
