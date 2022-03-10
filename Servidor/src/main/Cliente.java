@@ -118,7 +118,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         
         try {
             
-            ServerSocket servidor_cliente = new ServerSocket(9090);
+            ServerSocket servidor = new ServerSocket(9090);
             
             Socket cliente;
             
@@ -126,12 +126,16 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
             
             while(true){
                 
-                cliente = servidor_cliente.accept();
+                cliente = servidor.accept();
                 
                 ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
                 
                 paqueteRecibido = (PaqueteEnvio) flujoentrada.readObject();
                 
+                campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+                
+                campochat.append("\n" + paqueteRecibido.getIps());
+                /*
                 if(!paqueteRecibido.getMensaje().equals("Online")) {
                 	
                 	campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
@@ -148,11 +152,11 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 		
                 		ip.addItem(i);
                 	}
-                }
+                }*/
             }
         } catch (Exception e) {
             
-            System.err.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
     
