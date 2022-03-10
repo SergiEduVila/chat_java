@@ -32,9 +32,13 @@ class MarcoCliente extends JFrame{
         add(milamina);
         
         setVisible(true);
+        
+        addWindowListener(new EnvioOnline());
     }
 }
 
+
+/* ------------------------ ENVIAR ESTADO DE ONLINE START ------------------------ */
 
 class EnvioOnline extends WindowAdapter{
 	
@@ -61,7 +65,7 @@ class EnvioOnline extends WindowAdapter{
 	}
 }
 
-
+/* ------------------------ ENVIAR ESTADO DE ONLINE END ------------------------ */
 
 class LaminaMarcoCliente extends JPanel implements Runnable{
     
@@ -148,14 +152,12 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            
-            //System.err.println(campo1.getText());
         	
         	campochat.append("\n" + campo1.getText());
             
             try {
                 
-                Socket misocket = new Socket("192.168.1.139", 9999);  /*192.168.1.139*/   /*172.18.8.53*/
+                Socket misocket = new Socket("192.168.1.46", 9999);  /*192.168.1.139*/   /*172.18.8.53*/  /* 192.168.1.46 <---- Usar este de aquí*/ 
                 
                 PaqueteEnvio datos = new PaqueteEnvio();
                 
@@ -170,12 +172,6 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 paquete_datos.writeObject(datos);
                 
                 misocket.close();
-                
-                /*DataOutputStream flujo_salida = new DataOutputStream(misocket.getOutputStream());
-                
-                flujo_salida.writeUTF(campo1.getText());
-                
-                flujo_salida.close();*/
                 
             } catch (IOException ex) {
                 

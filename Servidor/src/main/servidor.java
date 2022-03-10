@@ -90,12 +90,7 @@ class MarcoServidor extends JFrame implements Runnable{
                 enviaDestinatario.close();
                 
                 misocket.close();
-                        
-                /*DataInputStream flujo_entrada = new DataInputStream(misocket.getInputStream());
-            
-                String mensaje_texto = flujo_entrada.readUTF();
-            
-                texto.append("\n" + mensaje_texto);*/
+
             }
             
         } catch (IOException | ClassNotFoundException ex) {
