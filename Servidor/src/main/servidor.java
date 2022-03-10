@@ -84,17 +84,17 @@ class MarcoServidor extends JFrame implements Runnable{
                     
                     String IpRemota = localizacion.getHostAddress();
                     
-                    // System.out.println("Online " + IpRemota);  <--  Línea usada para comprobar que se obtenia la ip del cliente al abrir su ventana
+                    System.out.println("Online " + IpRemota);  //<--  Línea usada para comprobar que se obtenia la ip del cliente al abrir su ventana
                     
                     listaIp.add(IpRemota);
                     
                     paquete_recibido.setIps(listaIp);
                     
-                    for(String i:listaIp) {
+                    for(String z:listaIp) {
                     	
-                    	System.out.println("Array: " + i);
+                    	System.out.println("Array: " + z);
                     	
-                    	Socket enviaDestinatario = new Socket(i, 9090);
+                    	Socket enviaDestinatario = new Socket(z, 9090);
                         
                         ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
                         

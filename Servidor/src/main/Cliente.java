@@ -138,15 +138,15 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 	
                 }else {
 
-                	ArrayList<String> Ipsmenu = new ArrayList<String>();
+                	ArrayList <String> IpsMenu = new ArrayList<String>();
                 	
-                	Ipsmenu = paqueteRecibido.getIps();
+                	IpsMenu = paqueteRecibido.getIps();
                 	
                 	ip.removeAllItems();
                 	
-                	for(String i:Ipsmenu) {
+                	for(String z:IpsMenu) {
                 		
-                		ip.addItem(i);
+                		ip.addItem(z);
                 	}
                 }
             }
@@ -211,6 +211,7 @@ class PaqueteEnvio implements Serializable{
     private ArrayList<String> Ips;
 
     public ArrayList<String> getIps() {
+    	
 		return Ips;
 	}
 
