@@ -131,11 +131,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
                 
                 paqueteRecibido = (PaqueteEnvio) flujoentrada.readObject();
-                
-                campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
-                
-                campochat.append("\n" + paqueteRecibido.getIps());
-                /*
+
                 if(!paqueteRecibido.getMensaje().equals("Online")) {
                 	
                 	campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
@@ -152,7 +148,7 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 		
                 		ip.addItem(i);
                 	}
-                }*/
+                }
             }
         } catch (Exception e) {
             
@@ -185,9 +181,12 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 
                 misocket.close();
                 
-            } catch (IOException ex) {
+            } catch (UnknownHostException e1) {
                 
-                System.err.println(ex.getMessage());
+                e1.printStackTrace();
+            }catch(IOException e1){
+            	
+            	System.out.println(e1.getMessage());
             }
         }       
     }
@@ -243,3 +242,4 @@ class PaqueteEnvio implements Serializable{
         this.mensaje = mensaje;
     }
 }
+
