@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +54,8 @@ class MarcoServidor extends JFrame implements Runnable{
             
             String nick, ip, mensaje;
             
+            ArrayList <String> listaIp = new ArrayList<String>();
+            
             PaqueteEnvio paquete_recibido;
             
             while (true) {
@@ -73,15 +76,7 @@ class MarcoServidor extends JFrame implements Runnable{
                 	
                 	areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
                     
-                    Socket enviaDestinatario = new Socket(ip, 9090);
                     
-                    ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
-                    
-                    paqueteReenvio.writeObject(paquete_recibido);
-                    
-                    enviaDestinatario.close();
-                    
-                    misocket.close();
                 }else {
              /*  -------------------- DETECTOR USUARISO ONLINE START --------------------  */        
                     
@@ -89,7 +84,24 @@ class MarcoServidor extends JFrame implements Runnable{
                     
                     String IpRemota = localizacion.getHostAddress();
                     
-                    System.out.println("Online " + IpRemota);
+                    // System.out.println("Online " + IpRemota);  <--  Línea usada para comprobar que se obtenia la ip del cliente al abrir su ventana
+                    
+                    listaIp.add(IpRemota);
+                    
+                    paquete_recibido.setIps(listaIp);
+                    
+                    for(String i:listaIp) {
+                    	
+                    	Socket enviaDestinatario = new Socket(i, 9090);
+                        
+                        ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                        
+                        paqueteReenvio.writeObject(paquete_recibido);
+                        
+                        enviaDestinatario.close();
+                        
+                        misocket.close();
+                    }
                     
              /*  -------------------- DETECTOR USUARISO ONLINE END --------------------  */
                 }

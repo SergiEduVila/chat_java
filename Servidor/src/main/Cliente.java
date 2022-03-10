@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,11 +90,15 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         
         ip = new JComboBox();
         
-        ip.addItem("Usuario1");
+        /*ip.addItem("Usuario1");
         
         ip.addItem("Usuario2");
         
         ip.addItem("Usuario3");
+        
+        ip.addItem("192.168.1.139");
+        
+        ip.addItem("192.168.1.140");*/
         
         add(ip);
         
@@ -137,11 +142,23 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 
                 paqueteRecibido = (PaqueteEnvio) flujoentrada.readObject();
                 
-                campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
-                
-                cliente.close();
+                if(!paqueteRecibido.getMensaje().equals("Online")) {
+                	
+                	campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+                	
+                }else {
+
+                	ArrayList<String> Ipsmenu = new ArrayList<String>();
+                	
+                	Ipsmenu = paqueteRecibido.getIps();
+                	
+                	for(String i:Ipsmenu) {
+                		
+                		ip.addItem(i);
+                	}
+                	//campochat.append("\n" + paqueteRecibido.getIps());
+                }
             }
-            
         } catch (Exception e) {
             
             System.err.println(e.getMessage());
@@ -196,8 +213,18 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
 class PaqueteEnvio implements Serializable{
     
     private String nick, ip, mensaje;
+    
+    private ArrayList<String> Ips;
 
-    public String getNick() {
+    public ArrayList<String> getIps() {
+		return Ips;
+	}
+
+	public void setIps(ArrayList<String> ips) {
+		Ips = ips;
+	}
+
+	public String getNick() {
         return nick;
     }
     
