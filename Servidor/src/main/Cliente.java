@@ -35,19 +35,61 @@ class MarcoCliente extends JFrame{
     }
 }
 
+
+class EnvioOnline extends WindowAdapter{
+	
+	public void windowOpened(WindowEvent e) {
+		
+		try {
+			
+			Socket misocket = new Socket("192.168.1.46", 9999);  /* IP del portátil, en el cúal ejecutaré el servidor */
+			
+			PaqueteEnvio datos = new PaqueteEnvio();
+			
+			datos.setMensaje("Online");
+			
+			ObjectOutputStream paquete_datos = new ObjectOutputStream(misocket.getOutputStream());
+			
+			paquete_datos.writeObject(datos);
+			
+			misocket.close();
+			
+		} catch (Exception e2){
+			
+			System.out.println("Algo ha fallado al enviar la señal de online.");
+		}
+	}
+}
+
+
+
 class LaminaMarcoCliente extends JPanel implements Runnable{
     
     public LaminaMarcoCliente(){
+    	
+    	String nick_usuario = JOptionPane.showInputDialog("Nick: ");
+    	
+    	JLabel n_nick = new JLabel("Nick: ");
+    	
+    	add(n_nick);
         
-        nick = new JTextField(5);
+        nick = new JLabel();
+        
+        nick.setText(nick_usuario);
         
         add(nick);
         
-        JLabel texto = new JLabel("---- C H A T ----");
+        JLabel texto = new JLabel("Online: ");
         
         add(texto);
         
-        ip = new JTextField(8);
+        ip = new JComboBox();
+        
+        ip.addItem("Usuario1");
+        
+        ip.addItem("Usuario2");
+        
+        ip.addItem("Usuario3");
         
         add(ip);
         
@@ -108,16 +150,18 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         public void actionPerformed(ActionEvent e) {
             
             //System.err.println(campo1.getText());
+        	
+        	campochat.append("\n" + campo1.getText());
             
             try {
                 
-                Socket misocket = new Socket("172.18.8.53", 9999);  /*192.168.1.185*/   /*172.18.8.53*/
+                Socket misocket = new Socket("192.168.1.139", 9999);  /*192.168.1.139*/   /*172.18.8.53*/
                 
                 PaqueteEnvio datos = new PaqueteEnvio();
                 
                 datos.setNick(nick.getText());
                 
-                datos.setIp(ip.getText());
+                datos.setIp(ip.getSelectedItem().toString());
                 
                 datos.setMensaje(campo1.getText());
                 
@@ -140,11 +184,16 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         }       
     }
     
-    private JTextField campo1, nick, ip;
+    private JTextField campo1;
+    
+    private JComboBox ip;
+    
+    private JLabel nick;
     
     private JTextArea campochat;
     
     private JButton miboton;
+    
 }
 
 
@@ -155,7 +204,7 @@ class PaqueteEnvio implements Serializable{
     public String getNick() {
         return nick;
     }
-
+    
     public void setNick(String nick) {
         this.nick = nick;
     }
