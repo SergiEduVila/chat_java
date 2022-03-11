@@ -54,8 +54,6 @@ class MarcoServidor extends JFrame implements Runnable{
             
             String nick, ip, mensaje;
             
-            ArrayList <String> listaIp = new ArrayList<String>();
-            
             PaqueteEnvio paquete_recibido;
             
             while (true) {
@@ -72,43 +70,19 @@ class MarcoServidor extends JFrame implements Runnable{
                 
                 mensaje = paquete_recibido.getMensaje();
                 
-                if(!mensaje.equals("Online")) {
-                	
-                	areatexto.append("\n" + nick + ": " + mensaje + " para " + ip);
-                    
-                    
-                }else {
-             /*  -------------------- DETECTOR USUARISO ONLINE START --------------------  */        
-                    
-                    InetAddress localizacion = misocket.getInetAddress();
-                    
-                    String IpRemota = localizacion.getHostAddress();
-                    
-                    System.out.println("Online " + IpRemota);  //<--  Línea usada para comprobar que se obtenia la ip del cliente al abrir su ventana
-                    
-                    listaIp.add(IpRemota);
-                    
-                    paquete_recibido.setIps(listaIp);
-                    
-                    for(String z:listaIp) {
-                    	
-                    	System.out.println("Array: " + z);
-                    	
-                    	Socket enviaDestinatario = new Socket(z, 9090);
-                        
-                        ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
-                        
-                        paqueteReenvio.writeObject(paquete_recibido);
-                        
-                        paqueteReenvio.close();
-                        
-                        enviaDestinatario.close();
-                        
-                        misocket.close();
-                    }
-                    
-             /*  -------------------- DETECTOR USUARISO ONLINE END --------------------  */
-                }
+                areatexto.append("\n" + nick + ": " + " para" + ip);
+                
+                Socket enviaDestinatario = new Socket(ip, 9090);
+                
+                ObjectOutputStream paqueteReenvio = new ObjectOutputStream(enviaDestinatario.getOutputStream());
+                
+                paqueteReenvio.writeObject(paquete_recibido);
+                
+                paqueteReenvio.close();
+                
+                enviaDestinatario.close();
+                
+                misocket.close();
             }
             
         } catch (IOException | ClassNotFoundException ex) {

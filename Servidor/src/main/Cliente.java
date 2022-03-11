@@ -34,20 +34,20 @@ class MarcoCliente extends JFrame{
         
         setVisible(true);
         
-        addWindowListener(new EnvioOnline());
+        //addWindowListener(new EnvioOnline());
     }
 }
 
 
-/* ------------------------ ENVIAR ESTADO DE ONLINE START ------------------------ */
-
+// ------------------------ ENVIAR ESTADO DE ONLINE START ------------------------
+/*
 class EnvioOnline extends WindowAdapter{
 	
 	public void windowOpened(WindowEvent e) {
 		
 		try {
 			
-			Socket misocket = new Socket("192.168.1.46", 9999);  /* IP del portátil, en el cúal ejecutaré el servidor */
+			Socket misocket = new Socket("192.168.1.139", 9999);  // IP del portátil, en el cúal ejecutaré el servidor
 			
 			PaqueteEnvio datos = new PaqueteEnvio();
 			
@@ -64,31 +64,31 @@ class EnvioOnline extends WindowAdapter{
 			System.out.println("Algo ha fallado al enviar la señal de online.");
 		}
 	}
-}
+}*/
 
-/* ------------------------ ENVIAR ESTADO DE ONLINE END ------------------------ */
+// ------------------------ ENVIAR ESTADO DE ONLINE END ------------------------
 
 class LaminaMarcoCliente extends JPanel implements Runnable{
     
     public LaminaMarcoCliente(){
     	
-    	String nick_usuario = JOptionPane.showInputDialog("Nick: ");
+    	/*String nick_usuario = JOptionPane.showInputDialog("Nick: ");
     	
     	JLabel n_nick = new JLabel("Nick: ");
     	
-    	add(n_nick);
+    	add(n_nick);*/
         
-        nick = new JLabel();
+        nick = new JTextField(5);
         
-        nick.setText(nick_usuario);
+        //nick.setText(nick_usuario);
         
         add(nick);
         
-        JLabel texto = new JLabel("Online: ");
+        JLabel texto = new JLabel(" - CHAT - ");
         
         add(texto);
         
-        ip = new JComboBox();
+        ip = new JTextField(12);
         
         add(ip);
         
@@ -131,7 +131,9 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 ObjectInputStream flujoentrada = new ObjectInputStream(cliente.getInputStream());
                 
                 paqueteRecibido = (PaqueteEnvio) flujoentrada.readObject();
-
+                
+                campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
+/*
                 if(!paqueteRecibido.getMensaje().equals("Online")) {
                 	
                 	campochat.append("\n" + paqueteRecibido.getNick() + ": " + paqueteRecibido.getMensaje());
@@ -148,14 +150,14 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
                 		
                 		ip.addItem(z);
                 	}
-                }
+                }*/
             }
         } catch (Exception e) {
             
             System.out.println(e.getMessage());
         }
     }
-    
+
     private class EnviaTexto implements ActionListener{
 
         @Override
@@ -165,13 +167,13 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
             
             try {
                 
-                Socket misocket = new Socket("192.168.1.46", 9999);  /*192.168.1.139*/   /*172.18.8.53*/  /* 192.168.1.46 <---- Usar este de aquí*/ 
+                Socket misocket = new Socket("192.168.1.46", 9999);   /* 192.168.1.46 <---- IP del portátil, el cúal usaré como servidor*/ 
                 
                 PaqueteEnvio datos = new PaqueteEnvio();
                 
                 datos.setNick(nick.getText());
                 
-                datos.setIp(ip.getSelectedItem().toString());
+                datos.setIp(ip.getText());
                 
                 datos.setMensaje(campo1.getText());
                 
@@ -191,56 +193,43 @@ class LaminaMarcoCliente extends JPanel implements Runnable{
         }       
     }
     
-    private JTextField campo1;
-    
+    private JTextField campo1, nick, ip;
+    /*
     private JComboBox ip;
     
-    private JLabel nick;
+    private JLabel nick;*/
     
     private JTextArea campochat;
     
     private JButton miboton;
-    
 }
 
-
 class PaqueteEnvio implements Serializable{
-    
-    private String nick, ip, mensaje;
-    
-    private ArrayList<String> Ips;
-
-    public ArrayList<String> getIps() {
-    	
-		return Ips;
-	}
-
-	public void setIps(ArrayList<String> ips) {
-		Ips = ips;
-	}
+	
+	private String nick, ip, mensaje;
 
 	public String getNick() {
-        return nick;
-    }
-    
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
+		return nick;
+	}
 
-    public String getIp() {
-        return ip;
-    }
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
+	public String getIp() {
+		return ip;
+	}
 
-    public String getMensaje() {
-        return mensaje;
-    }
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-    public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
-    }
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String message) {
+		this.mensaje = message;
+	}
 }
 
